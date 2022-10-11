@@ -4,14 +4,15 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/react-todolist-with-redux-saga/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
       '@bootstrap': path.resolve(__dirname, 'src/bootstrap'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@configs': path.resolve(__dirname, 'src/configs'),
-      '@pages': path.resolve(__dirname, 'src/pages')
-    }
+      '@pages': path.resolve(__dirname, 'src/pages'),
+    },
   },
-  plugins: [react()]
+  plugins: [react()],
 })
