@@ -6,7 +6,7 @@ import {
   fork,
   all,
   delay,
-  select
+  select,
 } from 'redux-saga/effects'
 
 import {
@@ -26,7 +26,7 @@ import {
   addTodoApi,
   deleteTodoApi,
   getTodoApi,
-  toggleTodoApi
+  toggleTodoApi,
 } from '@bootstrap/bootstrapApis'
 
 import { toast } from 'react-toastify'
@@ -39,7 +39,7 @@ const updateToast = (toastId, message, type, delay) => {
     isLoading: false,
     autoClose: 1500,
     delay: delay || false,
-    draggable: true
+    draggable: true,
   })
 }
 
@@ -53,50 +53,52 @@ function* getTodoAsync() {
   }
 }
 function* addTodoAsync({ payload }) {
-  const toastId = toast.loading("Submitting new todo...")
+  const toastId = toast.loading('Submitting new todo...')
   try {
     const response = yield call(addTodoApi, payload)
     yield put(addTodoSuccess(response.data))
-    updateToast(toastId, "Successfully submitted todo", "success")
+    updateToast(toastId, 'Successfully submitted todo', 'success')
   } catch (error) {
     yield put(addTodoFailed(error))
-    updateToast(toastId, "Error while submitting todo", "error")
+    updateToast(toastId, 'Error while submitting todo', 'error')
   }
 }
 function* toggleTodoAsync({ payload: id }) {
-  const toastId = toast.loading("Toggling todo...")
+  const toastId = toast.loading('Toggling todo...')
   try {
-    const { ...targetTodo } = yield select((state) => state.todos.todos.find((todo) => todo.id === id))
+    const { ...targetTodo } = yield select((state) =>
+      state.todos.todos.find((todo) => todo.id === id)
+    )
     targetTodo.completed = !targetTodo.completed
     yield call(toggleTodoApi, id, targetTodo)
     yield put(toggleTodoSuccess(id))
-    updateToast(toastId, "Successfully toggled todo", "success")
+    updateToast(toastId, 'Successfully toggled todo', 'success')
   } catch (error) {
     yield put(toggleTodoFailed(id))
-    updateToast(toastId, "Error while toggling todo", "error", 100)
+    updateToast(toastId, 'Error while toggling todo', 'error', 100)
   }
 }
 function* deleteTodoAsync({ payload: id }) {
-  const toastId = toast.loading("Deleting todo...")
+  const toastId = toast.loading('Deleting todo...')
   try {
     yield call(deleteTodoApi, id)
     yield put(deleteTodoSuccess(id))
-    updateToast(toastId, "Successfully deleted todo", "success")
+    updateToast(toastId, 'Successfully deleted todo', 'success')
   } catch (error) {
     yield put(deleteTodoFailed(id))
-    updateToast(toastId, "Error while deleting todo", "error", 100)
+    updateToast(toastId, 'Error while deleting todo', 'error', 100)
   }
 }
 function* resetTodoAsync() {
-  const toastId = toast.loading("Reseting todos...")
+  const toastId = toast.loading('Resetting todos...')
   try {
     const response = yield call(getTodoApi)
     yield delay(1000)
     yield put(resetTodoSuccess(response.data.slice(0, 5)))
-    updateToast(toastId, "Successfully reseted todos", "success")
+    updateToast(toastId, 'Successfully reset todos', 'success')
   } catch (error) {
     yield put(resetTodoFailed(error.response?.data))
-    updateToast(toastId, "Error while reseting todos", "error", 100)
+    updateToast(toastId, 'Error while resetting todos', 'error', 100)
   }
 }
 
@@ -121,7 +123,7 @@ const bootstrap = [
   fork(addTodoSaga),
   fork(toggleTodoSaga),
   fork(deleteTodoSaga),
-  fork(resetTodoSaga)
+  fork(resetTodoSaga),
 ]
 
 function* bootstrapSagas() {
